@@ -40,9 +40,3 @@ The Weather Dashboard is a web application designed to help travelers check the 
 ## Getting Started
 
 
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/weather-dashboard.git
-   cd weather-dashboard
