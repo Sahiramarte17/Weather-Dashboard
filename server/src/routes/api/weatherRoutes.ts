@@ -1,39 +1,42 @@
-import { Router } from 'express';
-import fs from 'fs/promises';
 
-import HistoryService from '../../service/historyService.js';
+import express, {type Request, type Response} from 'express'
 import WeatherService from '../../service/weatherService.js';
+import HistoryService from '../../service/historyService.js';
 
-// TODO: POST Request with city name to retrieve weather data
-router.post('/', (req, res) => {
-  router.post('/', async (req, res) => {
-    const cityName = req.body.city; // Extract city name from request body
-  
-    try {
-    // TODO: GET weather data from city name
+const router = express.Router ();
+
+// POST Request with city name to retrieve weather data
+router.post('/', async (req: Request, res: Response) => {
+ //const { New York, Denver, Saetle, Orlando } = req.body;
+  console.log("Incoming Data: ", req.body);
+ const { cityName } = req.body;
+  try {
+ 
+    // GET weather data from city name
     const weatherData = await WeatherService.getWeatherForCity(cityName);
+    console.log('Data: ', weatherData)
+    // Save city to search history
+    await HistoryService.addCity(cityName);
 
-  // TODO: save city to search history
-  await HistoryService.addCity(cityName);
-
-// TODO: GET search history
-router.get('/history', async (req, res) => {
-  const cities = await HistoryService.getCities(); // Get cities from history service
-  res.json(cities); // Respond with cities as JSON
-} catch (error) {
-  res.status(500).json({ error: 'Failed to fetch search history' });
-}
+    // Respond with weather data
+    res.json(weatherData);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch weather data' });
+  }
 });
 
- // Respond with weather data
- res.json(weatherData);
-} catch (error) {
-  res.status(500).json({ error: 'Failed to fetch weather data' });
-}
+// GET search history
+router.get('/history', async (_req: Request, res: Response) => {
+  try {
+    const cities = await HistoryService.getCities(); // Get cities from history service
+    res.json(cities); // Respond with cities as JSON
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch search history' });
+  }
 });
 
-// * BONUS TODO: DELETE city from search history
-router.delete('/history/:id', async (req, res) => {
+// BONUS TODO: DELETE city from search history
+router.delete('/history/:id', async (req: Request, res: Response) => {
   const id = req.params.id; // Get the city ID from request parameters
 
   try {

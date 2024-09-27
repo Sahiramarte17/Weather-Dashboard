@@ -1,11 +1,16 @@
 import dotenv from 'dotenv';
 dotenv.config();
+//import { Coordinates } from './path/to/your/types';
+import axios from 'axios';
 
 // TODO: Define an interface for the Coordinates object
-// Coordinates interface
 interface Coordinates {
-  lat: number;
-  lon: number;
+  lat: number | undefined;
+  lon: number | undefined;
+  coord?: {
+      lat?: number;
+      lon?: number;
+  };
 }
 
 
@@ -25,40 +30,46 @@ class Weather {
 
 class WeatherService {
   private baseURL: string;
-  private apiKey: string;
+  private apiKey: string | undefined;
+
 
 
   // TODO: Define the baseURL, API key, and city name properties
-  constructor() {
-    this.baseURL = 'https://api.openweathermap.org/data/2.5';
-    this.apiKey = process.env.API_KEY || ''; // Your OpenWeather API key
+  constructor(baseURL: string, apiKey: string | undefined) {
+    this.baseURL = baseURL;
+    this.apiKey = apiKey;
   }
 
   // TODO: Create fetchLocationData method
   private async fetchLocationData(query: string): Promise<Coordinates> {
-    const response = await axios.get(`${this.baseURL}/weather?q=${query}&appid=${this.apiKey}&units=metric`);
+    const response: any = await axios.get(`${this.baseURL}/weather?q=${query}&appid=${this.apiKey}&units=metric`);
     return this.destructureLocationData(response.data);
   }
 
   // TODO: Create destructureLocationData method
   private destructureLocationData(locationData: Coordinates): Coordinates {
     return {
-      lat: locationData.coord.lat,
-      lon: locationData.coord.lon,
-    };
-  
+      lat: locationData.coord?.lat,
+      lon: locationData.coord?.lon,
+    }
+  };
   // TODO: Create buildGeocodeQuery method
-  private buildGeocodeQuery(cityName: string): string {
+  /* --> private buildGeocodeQuery(cityName: string): string {
     return `${this.baseURL}/weather?q=${encodeURIComponent(cityName)}&appid=${this.apiKey}&units=metric`;
-  // TODO: Create buildWeatherQuery method
-   private buildWeatherQuery(coordinates: Coordinates): string {
-    return `${this.baseURL}/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&exclude=hourly,minutely&appid=${this.apiKey}&units=metric`;
-  }
+};
+*/ 
+
+  
+    // TODO: Create buildWeatherQuery method
+
+    private buildWeatherQuery(coordinates: Coordinates): string {
+      return `${this.baseURL}/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&exclude=hourly,minutely&appid=${this.apiKey}&units=metric`;
+  };
 
   // TODO: Create fetchAndDestructureLocationData method
-  private async fetchAndDestructureLocationData() {}
+// -->  private async fetchAndDestructureLocationData() {}
   // TODO: Create fetchWeatherData method
-   private async fetchWeatherData(coordinates: Coordinates); Promise<any> {
+   private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
     const response = await axios.get(this.buildWeatherQuery(coordinates));
     return response.data;
   } 
@@ -93,5 +104,6 @@ class WeatherService {
   }
 }
 
+const base = 'https://api.openweathermap.org';
 
-export default new WeatherService();
+export default new WeatherService(base, process.env.API_KEY);
