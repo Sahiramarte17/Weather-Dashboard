@@ -1,7 +1,7 @@
 {
   "name": "weather-dashboard",
   "version": "1.0.0",
-  "description": "",
+  "description": "The Weather Dashboard is a web application designed to help travelers check the weather outlook for multiple cities. By entering a city name, users can view current and future weather conditions, helping them plan their trips accordingly.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

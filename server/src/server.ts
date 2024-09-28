@@ -9,7 +9,9 @@ import routes from './routes/index.js';
 
 const app = express();
 
-const PORT = process.env.PORT || 3005;
+
+
+const PORT = process.env.PORT || 3000;
 
 // TODO: Serve static files of entire client dist folder
 //app.use(express.static(path.join(__dirname, '../client/dist')));
