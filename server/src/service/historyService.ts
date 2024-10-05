@@ -1,3 +1,6 @@
+import fs from 'fs/promises';
+import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
+import searchHistory from '../../db/searchHistory.json' assert { type: 'json' };
 // Define a City class with name and id properties
 class City {
 
@@ -10,12 +13,23 @@ class City {
   }
 }
 
-import fs from 'fs/promises';
-import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
-import searchHistory from '../../db/searchHistory.json';
 
-let searchPath = JSON.parse(searchHistory);
 
+let searchPath: string = JSON.parse(searchHistory);
+/*
+fs.readFile('../../db/searchHistory.json', 'utf8')
+  .then(data => {
+    console.log("Data: ", data);
+    console.log("Type: ", typeof data);
+    let jsData = JSON.parse(data);
+    console.log("JS: ", jsData);
+
+  })
+  .catch(err => {
+    console.log("Err: ", err);
+    throw Error(err);
+  })
+*/
 // Complete the HistoryService class
 class HistoryService {
   filePath: string;
