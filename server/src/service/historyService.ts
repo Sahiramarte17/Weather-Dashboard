@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';  // For reading and writing files
 import { v4 as uuidv4 } from 'uuid';  // For generating unique IDs
-import path from 'path';
+
 
 // TODO: Define a City class with name and id properties
 class City {
@@ -15,7 +15,7 @@ class City {
 
 // TODO: Complete the HistoryService class
 class HistoryService {
-  private filePath = path.join(__dirname, 'searchHistory.json');
+  private filePath = 'db/db.json'
 
   // Read method: Reads from the searchHistory.json file
   private async read(): Promise<City[]> {
@@ -67,7 +67,7 @@ async removeCity(id: string): Promise<boolean> {
 }
   
   // Export the HistoryService class
-export default HistoryService;
+export default new HistoryService();
   
   
   

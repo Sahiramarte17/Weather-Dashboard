@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "id": "79e1956b-6113-46d0-8668-587a63904910",
+    "name": "san diego"
+  },
+  {
+    "id": "d8239420-1927-4811-bccf-5dd0e4f450a5",
+    "name": "San Diego"
+  },
+  {
+    "id": "a411c51d-0d98-4b9d-b5d3-037483710ebe",
+    "name": "New York"
+  },
+  {
+    "id": "847b108a-0d6f-4772-be3b-00ae4b5d2561",
+    "name": "New York"
+  },
+  {
+    "id": "b1086925-234e-4f26-8d45-e08f09fb4c41",
+    "name": "New York"
+  },
+  {
+    "id": "d0dc28d4-0fbf-440d-95c7-b4beb328d6bb",
+    "name": "New York"
+  },
+  {
+    "id": "478be7fe-0442-47f8-a27b-4c22e30365e4",
+    "name": "san diego"
+  }
+]

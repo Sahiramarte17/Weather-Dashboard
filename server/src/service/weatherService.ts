@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import dotenv from 'dotenv';
+dotenv.config()
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
@@ -37,14 +38,15 @@ class WeatherService {
   private apiKey: string;
   private city: string;
 
-  constructor(city: string) {
+  constructor() {
     this.baseURL = 'https://api.openweathermap.org/data/2.5';
-    this.apiKey = process.env.OPENWEATHER_API_KEY || '';
-    this.city = city;
+    this.apiKey = process.env.API_KEY || '';
+    this.city = '';
   }
 // Fetch location data using the OpenWeather Geocoding API
 private async fetchLocationData(query: string): Promise<any> {
-  const url = this.buildGeocodeQuery(query);
+  this.city = query
+  const url = this.buildGeocodeQuery();
   const response = await axios.get(url);
   return response.data[0];  // Assuming the first result is the most relevant
 }
@@ -101,7 +103,8 @@ private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
     });
   }
 // Main method: Get weather for the city, including current and future conditions
-async getWeatherForCity(): Promise<{ currentWeather: Weather; forecast: Weather[] }> {
+async getWeatherForCity(query: string): Promise<{ currentWeather: Weather; forecast: Weather[] }> {
+  this.city = query
   const coordinates = await this.fetchAndDestructureLocationData();
   const weatherData = await this.fetchWeatherData(coordinates);
 
@@ -115,13 +118,13 @@ async getWeatherForCity(): Promise<{ currentWeather: Weather; forecast: Weather[
 }
 }
 
-(async () => {
-  const weatherService = new WeatherService('New York');
-  const weatherData = await weatherService.getWeatherForCity();
+// (async () => {
+//   const weatherService = new WeatherService('New York');
+//   const weatherData = await weatherService.getWeatherForCity();
 
-  console.log('Current Weather:', weatherData.currentWeather);
-  console.log('5-Day Forecast:', weatherData.forecast);
-})();
+//   console.log('Current Weather:', weatherData.currentWeather);
+//   console.log('5-Day Forecast:', weatherData.forecast);
+// })();
 
 export default new WeatherService();
 
