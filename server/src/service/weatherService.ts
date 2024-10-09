@@ -123,7 +123,7 @@ async getWeatherForCity(): Promise<{ currentWeather: Weather; forecast: Weather[
   console.log('5-Day Forecast:', weatherData.forecast);
 })();
 
-export default new WeatherService;
+export default new WeatherService();
 
 
 
