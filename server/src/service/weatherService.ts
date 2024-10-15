@@ -11,24 +11,31 @@ interface Coordinates {
 
 // TODO: Define a class for the Weather object
 class Weather {
-  temperature: number;
-  humidity: number;
-  windSpeed: number;
-  description: string;
+  city: string;
+  date: string;
   icon: string;
+  iconDescription: string;
+  tempF: number;
+  windSpeed: number;
+  humidity: number
+
 
   constructor(
-    temperature: number,
-    humidity: number,
+    city: string,
+    date: string,
+    icon: string,
+    iconDescription: string,
+    tempF: number,
     windSpeed: number,
-    description: string,
-    icon: string
+    humidity: number
   ) {
-    this.temperature = temperature;
+    this.city = city;
+    this.date=date;
+    this.icon = icon;
+    this.iconDescription = iconDescription;
+    this.tempF=tempF;
     this.humidity = humidity;
     this.windSpeed = windSpeed;
-    this.description = description;
-    this.icon = icon;
   }
 }
 
@@ -80,41 +87,35 @@ private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
 
 }
  // Parse the current weather from the API response
-  private parseCurrentWeather(response: any): Weather {
-    const currentWeather = response.list[0]; // Assume the first in the list is the current weather
-    const temperature = currentWeather.main.temp;
+  private parseCurrentWeather(currentWeather: any): Weather {
+    //const currentWeather = response.list[0]; // Assume the first in the list is the current weather
+    const tempF = currentWeather.main.temp;
     const humidity = currentWeather.main.humidity;
     const windSpeed = currentWeather.wind.speed;
-    const description = currentWeather.weather[0].description;
+    const iconDescription = currentWeather.weather[0].description;
     const icon = currentWeather.weather[0].icon;
+    const date=currentWeather.dt_txt
 
-    return new Weather(temperature, humidity, windSpeed, description, icon);
+    return new Weather(this.city,date,icon,iconDescription, tempF, windSpeed, humidity);
   }
   // Build an array of forecast data
   private buildForecastArray(weatherData: any[]): Weather[] {
-    return weatherData.map((entry: any) => {
-      const temperature = entry.main.temp;
-      const humidity = entry.main.humidity;
-      const windSpeed = entry.wind.speed;
-      const description = entry.weather[0].description;
-      const icon = entry.weather[0].icon;
-
-      return new Weather(temperature, humidity, windSpeed, description, icon);
-    });
+    return weatherData.map((entry: any) => this.parseCurrentWeather(entry))
   }
 // Main method: Get weather for the city, including current and future conditions
-async getWeatherForCity(query: string): Promise<{ currentWeather: Weather; forecast: Weather[] }> {
+async getWeatherForCity(query: string): Promise<Weather[] > {
   this.city = query
   const coordinates = await this.fetchAndDestructureLocationData();
   const weatherData = await this.fetchWeatherData(coordinates);
 
-  const currentWeather = this.parseCurrentWeather(weatherData);
+  const currentWeather = this.parseCurrentWeather(weatherData.list[0]);
   const forecast = this.buildForecastArray(weatherData.list.slice(1, 6)); // Next 5-day forecast
-
-  return {
+console.log (currentWeather)
+console.log (forecast)
+  return [
     currentWeather,
-    forecast
-  };
+    ...forecast
+  ];
 }
 }
 
